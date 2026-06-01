@@ -218,6 +218,7 @@ html {
 .html { width: 60%; }
 .css { width: 60%; }
 .js { width: 60%; }
+.sql { width: 55%; }
 
 .tech-stack {
     display: flex;
