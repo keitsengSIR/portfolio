@@ -569,23 +569,33 @@ if __name__ == "__main__":
                 <p>+267 78 756 469</p>
             </div>
 
-            <form class="contact-form fade-in">
-                <input type="text" placeholder="Name">
-                <input type="email" placeholder="Email">
-                <textarea placeholder="Tell me about your project..."></textarea>
-                <button type="submit">Send Message</button>
-            </form>
+    <form id="contactForm" class="contact-form fade-in">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <textarea name="message" placeholder="Tell me about your project..." required></textarea>
+        <button type="submit">Send Message</button>
+    </form>
 
-        </div>
-    </section>
+<script>
+document.getElementById("contactForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    <!-- FOOTER -->
-    <footer>
-        <h3>Miguel Keitseng</h3>
-        <p>Built with passion for technology and innovation.</p>
-        <p>© 2026 Miguel Kesego Keitseng.<br> All rights reserved.</br></p>
-    </footer>
+  const formData = {
+    name: e.target.name.value,
+    email: e.target.email.value,
+    message: e.target.message.value
+  };
 
-</body>
-</html>
+  const response = await fetch("/api/contact", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData)
+  });
 
+  if (response.ok) {
+    alert("Message sent successfully!");
+  } else {
+    alert("Failed to send message.");
+  }
+});
+</script>
