@@ -7,14 +7,15 @@ export default async function handler(req, res) {
 
     try {
       await resend.emails.send({
-        from: "onboarding@resend.dev", 
-        to: "miguelkeitseng5@gmail.com", 
+        from: "onboarding@resend.dev", //temp sender
+        to: "miguelkeitseng5@gmail.com",
         subject: `New message from ${name}`,
         html: `<p><strong>Email:</strong> ${email}</p><p>${message}</p>`,
       });
 
       res.status(200).json({ success: true });
     } catch (error) {
+      console.error(error); // temp
       res.status(500).json({ error: error.message });
     }
   } else {
