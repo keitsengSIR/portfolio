@@ -1,0 +1,4 @@
+[build]
+  base = "portfolio"
+  command = "next build"
+  publish = ".next"
