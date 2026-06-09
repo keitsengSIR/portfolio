@@ -1,3 +1,4 @@
+// Vercel deployment update
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   logging: {
