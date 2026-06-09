@@ -4,10 +4,11 @@
   "description": "",
   "main": "script.js",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/keitsengSIR/portfolio.git"
