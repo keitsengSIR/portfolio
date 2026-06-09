@@ -1,168 +1,184 @@
-import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import Head from "next/head";
+import { useEffect } from "react";
 
 export default function Home() {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [formStatus, setFormStatus] = useState('');
-
   useEffect(() => {
-    const fadeElements = document.querySelectorAll('.fade-in');
-    const handleScroll = () => {
-      fadeElements.forEach(element => {
+    // Fade-in effect from script.js
+    const fadeElements = document.querySelectorAll(".fade-in");
+    window.addEventListener("scroll", () => {
+      fadeElements.forEach((element) => {
         const position = element.getBoundingClientRect().top;
         const screenPosition = window.innerHeight / 1.3;
         if (position < screenPosition) {
-          element.classList.add('show');
+          element.classList.add("show");
         }
       });
-    };
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    // Contact form submission
+    const form = document.getElementById("contactForm");
+    if (form) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = e.target.name.value;
+        const email = e.target.email.value;
+        const message = e.target.message.value;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setFormStatus('Sending...');
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        try {
+          const res = await fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, message }),
+          });
+
+          if (res.ok) {
+            alert("Message sent!");
+            e.target.reset();
+          } else {
+            const errorData = await res.json();
+            alert("Failed: " + (errorData.error || "Unknown error"));
+          }
+        } catch (err) {
+          alert("Network error — could not send message.");
+        }
       });
-      const data = await res.json();
-      if (res.ok) {
-        setFormStatus('Message sent successfully!');
-        setFormData({ name: '', email: '', message: '' });
-      } else {
-        setFormStatus(data.error || 'Something went wrong. Please try again.');
-      }
-    } catch {
-      setFormStatus('Failed to send message. Please try again.');
     }
-  };
+  }, []);
 
   return (
     <>
       <Head>
-        <title>Portfolio</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="/assets/style.css" />
+        <title>Miguel Kesego Keitseng | Portfolio</title>
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/style.css" />
       </Head>
-      
-      <nav className="navbar">
-        <div className="nav-brand">Portfolio</div>
-        <ul className="nav-links">
-          <li><a href="#about">About</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
 
-      <section className="hero fade-in">
-        <div className="hero-content">
-          <h1>Hi, I&apos;m a Developer</h1>
-          <p>I build modern web experiences.</p>
-          <a href="#contact" className="btn">Get in Touch</a>
-        </div>
-      </section>
-
-      <section id="about" className="about fade-in">
-        <div className="container">
-          <h2>About Me</h2>
-          <p>
-            I&apos;m a passionate developer focused on building clean, performant, and accessible web applications.
-          </p>
-        </div>
-      </section>
-
-      <section id="skills" className="skills fade-in">
-        <div className="container">
-          <h2>Skills</h2>
-          <ul className="skills-list">
-            <li>JavaScript</li>
-            <li>React</li>
-            <li>Next.js</li>
-            <li>Node.js</li>
-            <li>CSS / Tailwind</li>
-            <li>Git &amp; GitHub</li>
+      {/* Navigation */}
+      <header>
+        <nav className="navbar">
+          <div className="logo">Sir M.K. Keitseng&apos;s Portfolio</div>
+          <ul className="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
           </ul>
-        </div>
-      </section>
+        </nav>
+      </header>
 
-      <section id="projects" className="projects fade-in">
-        <div className="container">
-          <h2>Projects</h2>
-          <div className="projects-grid">
-            <div className="project-card">
-              <h3>Project One</h3>
-              <p>A brief description of this project and what technologies were used.</p>
-              <a href="#" className="btn">View Project</a>
-            </div>
-            <div className="project-card">
-              <h3>Project Two</h3>
-              <p>A brief description of this project and what technologies were used.</p>
-              <a href="#" className="btn">View Project</a>
-            </div>
-            <div className="project-card">
-              <h3>Project Three</h3>
-              <p>A brief description of this project and what technologies were used.</p>
-              <a href="#" className="btn">View Project</a>
-            </div>
+      {/* Hero Section */}
+      <section id="home" className="hero">
+        <div className="hero-content fade-in">
+          <h1>Miguel Kesego <span>Keitseng</span></h1>
+          <h2>
+            Aspiring Network Engineer and Data Analyst.<br />
+            Main focus is on network engineering...
+          </h2>
+          <p>
+            Building reliable infrastructure and elegant digital experiences from Botswana.
+          </p>
+          <div className="hero-buttons">
+            <a href="#projects" className="btn">View Projects</a>
+            <a href="#contact" className="btn btn-outline">Contact Me</a>
+          </div>
+        </div>
+        <div className="hero-image fade-in">
+          <div className="image-card">
+            <img src="/assets/miguel.jpg" alt="Miguel Kesego Keitseng" />
           </div>
         </div>
       </section>
 
-      <section id="contact" className="contact fade-in">
-        <div className="container">
-          <h2>Contact</h2>
-          <div className="contact-form">
-            <div>
-              <label htmlFor="name">Name</label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="email">Email</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="message">Message</label>
-              <textarea
-                id="message"
-                name="message"
-                rows="5"
-                value={formData.message}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <button onClick={handleSubmit} className="btn">Send Message</button>
-            {formStatus && <p className="form-status">{formStatus}</p>}
+      {/* About Section */}
+      <section id="about" className="section">
+        <div className="section-title">
+          <h2>About Miguel</h2>
+        </div>
+        <div className="about-container">
+          <div className="about-text fade-in">
+            <h3>Curious by nature. Engineer by craft.</h3>
+            <p>
+              I&apos;m a passionate aspiring network engineer and data analyst...
+            </p>
+            <p>
+              I&apos;m currently a student with goals of monitoring network performance...
+            </p>
+          </div>
+          <div className="qualities fade-in">
+            <h3>Personal Qualities</h3>
+            <ul>
+              <li>Passionate learner</li>
+              <li>Team collaboration</li>
+              <li>Problem solving</li>
+              <li>Technology enthusiast</li>
+              <li>Adaptability & growth</li>
+            </ul>
           </div>
         </div>
       </section>
 
-      <footer className="footer">
-        <p>&copy; {new Date().getFullYear()} Portfolio. All rights reserved.</p>
+      {/* Skills Section */}
+      <section id="skills" className="section">
+        <div className="section-title">
+          <h2>Skills Powering My Work</h2>
+          <p>A blend of network fundamentals and front-end craft — with room for growth.</p>
+        </div>
+        <div className="skills-container">
+          <div className="skill-card fade-in">
+            <div className="skill-info"><span>Networking</span><span>70%</span></div>
+            <div className="progress-bar"><div className="progress networking"></div></div>
+          </div>
+          {/* Repeat for other skills */}
+        </div>
+      </section>
+
+      {/* Projects Section */}
+      <section id="projects" className="section">
+        <div className="section-title">
+          <h2>Projects That Shaped Me</h2>
+        </div>
+        <div className="project-grid">
+          <div className="project-card fade-in">
+            <h3>Loadlink — Distributed AI Traffic Processor</h3>
+            <p>Python worker consuming Kafka traffic, forecasting with Prophet, caching in Redis.</p>
+            <div className="tech-stack">
+              <span>Python</span><span>Kafka</span><span>Redis</span><span>Prophet</span>
+            </div>
+          </div>
+          {/* Repeat for other projects */}
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="section">
+        <div className="section-title">
+          <h2>Let&apos;s Build Something👷</h2>
+          <p>Open to internships, collaboration and freelance front-end work.</p>
+        </div>
+        <div className="contact-grid">
+          <div className="contact-info fade-in">
+            <h3>Email Address📧</h3>
+            <p>miguelkeitseng5@gmail.com</p>
+            <h3>Phone Number📞</h3>
+            <p>+267 71 869 211</p>
+            <h3>Alt. Phone Number📞</h3>
+            <p>+267 78 756 469</p>
+          </div>
+          <form id="contactForm" className="contact-form fade-in">
+            <input type="text" name="name" placeholder="Your Name" required />
+            <input type="email" name="email" placeholder="Your Email" required />
+            <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+            <button type="submit" className="btn">Send Message</button>
+          </form>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer>
+        <p>&copy; 2024 Miguel Kesego Keitseng. <br />All rights reserved.</p>
       </footer>
     </>
   );
