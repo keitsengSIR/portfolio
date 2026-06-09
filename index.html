@@ -578,30 +578,39 @@ if __name__ == "__main__":
 
         </div>
     </section>
+        <script>
+  document.getElementById("contactForm").addEventListener("submit", async (e) => {
+    e.preventDefault(); // stop page reload
+
+    const name = e.target.name.value;
+    const email = e.target.email.value;
+    const message = e.target.message.value;
+
+    try {
+      const res = await fetch("https://portfolio-kappa-wine-39.vercel.app/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      if (res.ok) {
+        alert("Message sent!");
+        e.target.reset(); // clear form
+      } else {
+        const errorData = await res.json();
+        alert("Failed to send message: " + (errorData.error || "Unknown error"));
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+      alert("Network error — could not send message.");
+    }
+  });
+</script>
 
     <!-- footer -->
     <footer>
-        <p>&copy; 2024 Miguel Kesego Keitseng. All rights reserved.</p>
+        <p>&copy; 2024 Miguel Kesego Keitseng. <br>All rights reserved.</br></p>
     </footer>
 
-<script>
-document.getElementById("contactForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const formData = {
-    name: e.target.name.value,
-    email: e.target.email.value,message: e.target.message.value
-  };
-  const response = await fetch("/api/contact", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(formData)
-  });
-
-  if (response.ok) {
-    alert("Message sent successfully!");
-  } else {
-    alert("Failed to send message.");
-  }
-});
-</script>
+</body>
+</html>
